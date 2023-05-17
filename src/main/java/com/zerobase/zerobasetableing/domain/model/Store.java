@@ -31,7 +31,7 @@ public class Store extends BaseEntity{
     @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "kiosk_id")
     private Kiosk kiosk;
 
