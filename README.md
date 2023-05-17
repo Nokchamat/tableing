@@ -4,7 +4,7 @@
 
 Use : SpringBoot, Jpa, Mysql
 
-Goal : 손님이 상인의 매점에 원격으로 줄을 설 수 있도록 함.
+Goal : 고객이 상점에 예약할 수 있도록 함.
 
 
 User
