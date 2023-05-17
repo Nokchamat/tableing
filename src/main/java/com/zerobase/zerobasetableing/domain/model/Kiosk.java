@@ -22,6 +22,7 @@ public class Kiosk {
     private Store store;
 
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservationList_id")
     private List<Reservation> reservationList;
 
 }

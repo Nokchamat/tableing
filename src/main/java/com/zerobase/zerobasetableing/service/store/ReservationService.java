@@ -32,7 +32,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Reservation reservation = Reservation.builder()
-                .customerId(customer.getId())
+                .customer(customer)
                 .phoneNumber(customer.getPhoneNumber())
                 .storeName(store.getName())
                 .currentReservationTime(form.getRequestReservationTime())
@@ -45,9 +45,8 @@ public class ReservationService {
         return reservationRepository.save(reservation);
     }
 
-    public List<Reservation> getReservationList(String userId) {
-        return customerRepository.findByUserId(userId)
-                .get().getReservationList();
+    public List<Reservation> getReservationList(Long id) {
+        return customerRepository.findById(id).get().getReservationList();
     }
 
 }

@@ -17,8 +17,6 @@ public class Reservation extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long customerId;
-
     private String phoneNumber;
 
     private String storeName;
@@ -28,5 +26,13 @@ public class Reservation extends BaseEntity{
     private LocalDateTime requestModifyReservationTime;
 
     private boolean isReservation;
+
+    @ManyToOne
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
+
+    @ManyToOne
+    @JoinColumn(name = "kiosk_id")
+    private Kiosk kiosk;
 
 }

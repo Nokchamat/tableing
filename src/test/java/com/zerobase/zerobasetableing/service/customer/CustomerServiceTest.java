@@ -3,6 +3,7 @@ package com.zerobase.zerobasetableing.service.customer;
 import com.zerobase.zerobasetableing.domain.form.SignUpForm;
 import com.zerobase.zerobasetableing.domain.model.Customer;
 import com.zerobase.zerobasetableing.domain.repository.CustomerRepository;
+import com.zerobase.zerobasetableing.service.user.CustomerService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

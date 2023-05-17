@@ -7,10 +7,6 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -37,8 +33,9 @@ public class JwtTokenProvider {
         log.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
-    public String createToken(String userId) {
+    public String createToken(Long id, String userId) {
         Claims claims = Jwts.claims().setSubject(userId); // 내용
+        claims.put("id", id);
         Date now = new Date();
 
         String token = Jwts.builder()
@@ -51,9 +48,11 @@ public class JwtTokenProvider {
         return token;
     }
 
-    public String getUserId(String token) {
-        String userId = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getSubject();
-        return userId;
+    public Long getId(String token) {
+        return Long.valueOf(
+                String.valueOf(
+                        Jwts.parser().setSigningKey(secretKey)
+                                .parseClaimsJws(token).getBody().get("id")));
     }
 
     public String resolveToken(HttpServletRequest request) {

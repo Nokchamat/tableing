@@ -17,22 +17,19 @@ public class Customer extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true, nullable = false)
+    @Column(unique = true)
     private String userId;
 
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private Integer age;
 
-    @Column(nullable = false)
     private String phoneNumber;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "reservation_id")
     private List<Reservation> reservationList;
 
 }

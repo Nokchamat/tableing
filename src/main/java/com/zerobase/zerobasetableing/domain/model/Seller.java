@@ -28,7 +28,7 @@ public class Seller extends BaseEntity{
 
     private String phoneNumber;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
