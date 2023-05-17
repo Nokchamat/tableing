@@ -26,7 +26,7 @@ public class CustomerController {
 
     //회원가입
     @PostMapping("/signup")
-    ResponseEntity<String> signUp(SignUpForm form){
+    ResponseEntity<String> signUp(@RequestBody SignUpForm form){
         customerService.signUp(form);
 
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
@@ -34,7 +34,7 @@ public class CustomerController {
 
     //로그인
     @PostMapping("/signin")
-    ResponseEntity<String> signIn(SignInForm form) {
+    ResponseEntity<String> signIn(@RequestBody SignInForm form) {
         String token = customerService.signIn(form);
 
         return ResponseEntity.ok(token);
@@ -44,7 +44,7 @@ public class CustomerController {
     //예약 - 토큰 인증 넣기
     @PostMapping("/reservation")
     ResponseEntity<String> requestReservation(
-            @RequestHeader String token,
+            @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestBody ReservationForm form) {
 
         if (!jwtTokenProvider.validateToken(token)) {
@@ -60,7 +60,7 @@ public class CustomerController {
 //    예약 내역 확인 - 토큰 인증 넣기
     @PostMapping("/reservation/list")
     ResponseEntity<List<Reservation>> getReservationList(
-            @RequestHeader String token) {
+            @RequestHeader(name = "X-AUTH-TOKEN") String token) {
         if (!jwtTokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }

@@ -2,7 +2,12 @@ package com.zerobase.zerobasetableing.service.store;
 
 import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
 import com.zerobase.zerobasetableing.domain.dto.StoreDto;
+import com.zerobase.zerobasetableing.domain.form.RegisterStoreForm;
+import com.zerobase.zerobasetableing.domain.model.Kiosk;
+import com.zerobase.zerobasetableing.domain.model.Seller;
 import com.zerobase.zerobasetableing.domain.model.Store;
+import com.zerobase.zerobasetableing.domain.repository.KioskRepository;
+import com.zerobase.zerobasetableing.domain.repository.SellerRepository;
 import com.zerobase.zerobasetableing.domain.repository.StoreRepository;
 import com.zerobase.zerobasetableing.exception.CustomException;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +21,8 @@ import java.util.stream.Collectors;
 public class StoreService {
 
     private final StoreRepository storeRepository;
-
+    private final SellerRepository sellerRepository;
+    private final KioskRepository kioskRepository;
 
     //가게 정보 보기 // 리밋 걸어야될듯?
     public List<StoreDto> getStore(){
@@ -37,8 +43,24 @@ public class StoreService {
     }
 
 
+    //가게 등록하기
+    public Store registerStore(RegisterStoreForm form, Long sellerId) {
+        // 키오스크 새로 주기
+        Kiosk kiosk = kioskRepository.save(new Kiosk());
 
+        Seller seller = sellerRepository.findById(sellerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
+        Store store = Store.builder()
+                .name(form.getStoreName())
+                .category(form.getCategory())
+                .location(form.getLocation())
+                .description(form.getDescription())
+                .seller(seller)
+                .kiosk(kiosk)
+                .build();
 
+        return storeRepository.save(store);
+    }
 
 }

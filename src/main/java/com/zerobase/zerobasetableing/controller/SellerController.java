@@ -7,6 +7,7 @@ import com.zerobase.zerobasetableing.service.user.SellerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +20,7 @@ public class SellerController {
 
     //회원가입
     @PostMapping("/signup")
-    ResponseEntity<String> signUp(SignUpForm form){
+    ResponseEntity<String> signUp(@RequestBody SignUpForm form){
         sellerService.signUp(form);
 
         return ResponseEntity.ok("회원가입이 완료되었습니다.");
@@ -27,10 +28,8 @@ public class SellerController {
 
     //로그인
     @PostMapping("/signin")
-    ResponseEntity<String> signIn(SignInForm form) {
-        String token = sellerService.signIn(form);
-
-        return ResponseEntity.ok(token);
+    ResponseEntity<String> signIn(@RequestBody SignInForm form) {
+        return ResponseEntity.ok( sellerService.signIn(form));
     }
 
     //예약 내역 확인
@@ -39,6 +38,5 @@ public class SellerController {
 
     //예약 요청 수락
 
-    //가게 등록
 
 }

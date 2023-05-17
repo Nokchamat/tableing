@@ -25,9 +25,10 @@ public class SellerService {
 
     @Transactional
     public void signUp(SignUpForm form) {
+
         sellerRepository.save(Seller.builder()
                         .userId(form.getUserId())
-                        .password(passwordEncoder.encode(form.getUserId()))
+                        .password(passwordEncoder.encode(form.getPassword()))
                         .name(form.getName())
                         .age(form.getAge())
                         .phoneNumber(form.getPhoneNumber())

@@ -1,5 +1,7 @@
 package com.zerobase.zerobasetableing.security;
 
+import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
+import com.zerobase.zerobasetableing.exception.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -61,15 +63,12 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        log.info("[validateToken] 토큰 유효 체크 시작");
-
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
 
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
-            log.info("[validateToken] 토큰 유효 체크 예외 발생");
-            return false;
+            throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
     }
