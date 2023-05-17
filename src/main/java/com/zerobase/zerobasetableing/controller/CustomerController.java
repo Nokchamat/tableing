@@ -7,7 +7,7 @@ import com.zerobase.zerobasetableing.domain.form.SignUpForm;
 import com.zerobase.zerobasetableing.domain.model.Reservation;
 import com.zerobase.zerobasetableing.exception.CustomException;
 import com.zerobase.zerobasetableing.security.JwtTokenProvider;
-import com.zerobase.zerobasetableing.service.customer.CustomerService;
+import com.zerobase.zerobasetableing.service.user.CustomerService;
 import com.zerobase.zerobasetableing.service.store.ReservationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -57,7 +57,7 @@ public class CustomerController {
                 "\n 예약 요청에 성공했습니다.");
     }
 
-    //예약 내역 확인 - 토큰 인증 넣기
+//    예약 내역 확인 - 토큰 인증 넣기
     @PostMapping("/reservation/list")
     ResponseEntity<List<Reservation>> getReservationList(
             @RequestHeader String token) {
@@ -66,7 +66,9 @@ public class CustomerController {
         }
 
         return ResponseEntity.ok(reservationService
-                .getReservationList(jwtTokenProvider.getUserId(token)));
+                .getReservationList(
+                        jwtTokenProvider.getId(token)
+                ));
     }
 
     //예약 내역 수정 - 토큰 인증 넣기

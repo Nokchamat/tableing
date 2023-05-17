@@ -28,12 +28,11 @@ public class Store extends BaseEntity{
     private String description;
 
     @OneToOne
-    @JoinColumn(name = "seller_id", nullable = false)
+    @JoinColumn(name = "seller_id")
     private Seller seller;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "kiosk_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "kiosk_id")
     private Kiosk kiosk;
-
 
 }

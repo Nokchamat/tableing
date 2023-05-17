@@ -1,4 +1,4 @@
-package com.zerobase.zerobasetableing.service.customer;
+package com.zerobase.zerobasetableing.service.user;
 
 import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.SignInForm;
@@ -34,7 +34,6 @@ public class CustomerService {
                 .build());
     }
 
-
     public String signIn(SignInForm form) {
         Customer customer = customerRepository
                 .findByUserId(form.getUserId())
@@ -45,6 +44,6 @@ public class CustomerService {
             throw new CustomException(ErrorCode.UNMATCHED_ID_OR_PASSWORD);
         }
 
-        return jwtTokenProvider.createToken(customer.getUserId());
+        return jwtTokenProvider.createToken(customer.getId(), customer.getUserId());
     }
 }
