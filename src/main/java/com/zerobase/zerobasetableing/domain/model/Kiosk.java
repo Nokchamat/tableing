@@ -1,9 +1,9 @@
 package com.zerobase.zerobasetableing.domain.model;
 
-
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,25 +11,17 @@ import javax.persistence.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class Seller extends BaseEntity{
+public class Kiosk {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
-    private String userId;
-
-    private String password;
-
-    private String name;
-
-    private Integer age;
-
-    private String phoneNumber;
-
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<Reservation> reservationList;
 
 }
