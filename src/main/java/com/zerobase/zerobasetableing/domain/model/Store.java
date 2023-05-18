@@ -1,8 +1,10 @@
 package com.zerobase.zerobasetableing.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -16,23 +18,17 @@ public class Store extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
     private String category;
 
-    @Column(nullable = false)
     private String location;
 
     private String description;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "seller_id")
+    @JsonIgnore
     private Seller seller;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "kiosk_id")
-    private Kiosk kiosk;
 
 }

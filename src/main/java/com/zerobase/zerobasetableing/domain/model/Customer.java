@@ -28,8 +28,4 @@ public class Customer extends BaseEntity{
 
     private String phoneNumber;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reservation_id")
-    private List<Reservation> reservationList;
-
 }

@@ -4,14 +4,17 @@ import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.ReservationForm;
 import com.zerobase.zerobasetableing.domain.model.Customer;
 import com.zerobase.zerobasetableing.domain.model.Reservation;
+import com.zerobase.zerobasetableing.domain.model.Seller;
 import com.zerobase.zerobasetableing.domain.model.Store;
 import com.zerobase.zerobasetableing.domain.repository.CustomerRepository;
 import com.zerobase.zerobasetableing.domain.repository.ReservationRepository;
+import com.zerobase.zerobasetableing.domain.repository.SellerRepository;
 import com.zerobase.zerobasetableing.domain.repository.StoreRepository;
 import com.zerobase.zerobasetableing.exception.CustomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
@@ -24,7 +27,10 @@ public class ReservationService {
 
     private final StoreRepository storeRepository;
 
-    public Reservation requestReservation(ReservationForm form) {
+    private final SellerRepository sellerRepository;
+
+    @Transactional
+    public void requestReservation(ReservationForm form) {
         Store store = storeRepository.findById(form.getStoreId())
                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
 
@@ -32,21 +38,47 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
 
         Reservation reservation = Reservation.builder()
-                .customer(customer)
+                .customerId(form.getCustomerId())
+                .storeId(form.getStoreId())
                 .phoneNumber(customer.getPhoneNumber())
                 .storeName(store.getName())
                 .currentReservationTime(form.getRequestReservationTime())
                 .isReservation(false)
                 .build();
 
-        customer.getReservationList().add(reservation);
-        store.getKiosk().getReservationList().add(reservation);
 
-        return reservationRepository.save(reservation);
+        reservationRepository.save(reservation);
     }
 
-    public List<Reservation> getReservationList(Long id) {
-        return customerRepository.findById(id).get().getReservationList();
+    public List<Reservation> getCustomerReservationList(Long customerId) {
+        return reservationRepository.findAllByCustomerId(customerId);
+
+    }
+
+    @Transactional
+    public List<Reservation> getSellerReservationList(Long sellerId, Long storeId) {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
+
+        if (sellerId != store.getSeller().getId()) {
+            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCH);
+        }
+
+        return reservationRepository.findAllByStoreIdAndIsReservationIsTrue(storeId);
+    }
+
+    @Transactional
+    public List<Reservation> getSellerReservationRequestList(Long sellerId, Long storeId) {
+
+        Store store = storeRepository.findById(storeId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
+
+        if (sellerId != store.getSeller().getId()) {
+            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCH);
+        }
+
+        return reservationRepository.findAllByStoreIdAndIsReservationIsFalse(storeId);
     }
 
 }

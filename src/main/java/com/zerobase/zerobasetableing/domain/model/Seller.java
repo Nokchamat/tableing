@@ -4,6 +4,7 @@ package com.zerobase.zerobasetableing.domain.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,8 +29,8 @@ public class Seller extends BaseEntity{
 
     private String phoneNumber;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "store_id")
-    private Store store;
+    private List<Store> store;
 
 }
