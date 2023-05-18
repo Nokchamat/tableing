@@ -40,6 +40,7 @@ public class StoreController {
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
             @RequestBody RegisterStoreForm form ) {
 
+
         if (!jwtTokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }

@@ -1,9 +1,11 @@
 package com.zerobase.zerobasetableing.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class Reservation extends BaseEntity{
 
     @Id
@@ -27,12 +30,8 @@ public class Reservation extends BaseEntity{
 
     private boolean isReservation;
 
-    @ManyToOne
-    @JoinColumn(name = "customer_id")
-    private Customer customer;
+    private Long customerId;
 
-    @ManyToOne
-    @JoinColumn(name = "kiosk_id")
-    private Kiosk kiosk;
+    private Long storeId;
 
 }

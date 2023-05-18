@@ -41,7 +41,7 @@ public class CustomerController {
     }
 
 
-    //예약 - 토큰 인증 넣기
+    //예약
     @PostMapping("/reservation")
     ResponseEntity<String> requestReservation(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
@@ -51,24 +51,24 @@ public class CustomerController {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
-        Reservation reservation = reservationService.requestReservation(form);
+        reservationService.requestReservation(form);
 
-        return ResponseEntity.ok().body(reservation.toString() +
-                "\n 예약 요청에 성공했습니다.");
+        return ResponseEntity.ok().body("예약 요청에 성공했습니다.");
     }
 
-//    예약 내역 확인 - 토큰 인증 넣기
-    @PostMapping("/reservation/list")
+//  예약 내역 확인
+    @GetMapping("/reservation/list")
     ResponseEntity<List<Reservation>> getReservationList(
             @RequestHeader(name = "X-AUTH-TOKEN") String token) {
+
         if (!jwtTokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
         }
 
-        return ResponseEntity.ok(reservationService
-                .getReservationList(
-                        jwtTokenProvider.getId(token)
-                ));
+        List<Reservation> reservationList = reservationService.getCustomerReservationList(
+                jwtTokenProvider.getId(token));
+
+        return ResponseEntity.ok(reservationList);
     }
 
     //예약 내역 수정 - 토큰 인증 넣기
@@ -78,5 +78,7 @@ public class CustomerController {
 
 
     //예약 내역 삭제 - 토큰 인증 넣기
+
+
 
 }
