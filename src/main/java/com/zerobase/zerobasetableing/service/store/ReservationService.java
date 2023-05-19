@@ -62,7 +62,7 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
 
         if (sellerId != store.getSeller().getId()) {
-            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCH);
+            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCHED);
         }
 
         return reservationRepository.findAllByStoreIdAndIsReservationIsTrue(storeId);
@@ -75,10 +75,34 @@ public class ReservationService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
 
         if (sellerId != store.getSeller().getId()) {
-            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCH);
+            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCHED);
         }
 
         return reservationRepository.findAllByStoreIdAndIsReservationIsFalse(storeId);
     }
 
+    @Transactional
+    public void acceptReservationRequest(Long sellerId, Long storeId, Long reservationId) {
+
+        Seller seller = sellerRepository.findById(sellerId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_USER));
+
+        Reservation reservation = reservationRepository.findById(reservationId)
+                .orElseThrow( () -> new CustomException(ErrorCode.NOT_FOUND_RESERVATION));
+
+        if ( seller.getStore().stream().noneMatch(store -> store.getId().equals(storeId)) ) {
+            throw new CustomException(ErrorCode.STORE_SELLER_NOT_MATCHED);
+        }
+
+        if (!storeId.equals(reservation.getStoreId())) {
+            throw new CustomException(ErrorCode.RESERVATION_STORE_NOT_MATCHED);
+        }
+
+        if (reservation.isReservation()) {
+            throw new CustomException(ErrorCode.ALREADY_ACCEPT);
+        }
+
+        reservation.setReservation(true);
+
+    }
 }
