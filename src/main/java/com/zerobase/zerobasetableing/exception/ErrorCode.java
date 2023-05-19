@@ -1,4 +1,4 @@
-package com.zerobase.zerobasetableing.domain.constants;
+package com.zerobase.zerobasetableing.exception;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

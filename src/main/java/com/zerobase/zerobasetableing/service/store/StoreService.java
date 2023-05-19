@@ -1,6 +1,6 @@
 package com.zerobase.zerobasetableing.service.store;
 
-import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
+import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.domain.dto.StoreDto;
 import com.zerobase.zerobasetableing.domain.form.RegisterStoreForm;
 import com.zerobase.zerobasetableing.domain.model.Seller;
