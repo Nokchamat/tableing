@@ -1,6 +1,6 @@
 package com.zerobase.zerobasetableing.security;
 
-import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
+import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.exception.CustomException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;

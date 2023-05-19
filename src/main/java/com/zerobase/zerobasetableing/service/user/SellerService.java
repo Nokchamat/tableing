@@ -1,6 +1,6 @@
 package com.zerobase.zerobasetableing.service.user;
 
-import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
+import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.SignInForm;
 import com.zerobase.zerobasetableing.domain.form.SignUpForm;
 import com.zerobase.zerobasetableing.domain.model.Seller;
