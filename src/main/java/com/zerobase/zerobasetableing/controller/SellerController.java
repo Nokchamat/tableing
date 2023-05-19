@@ -2,6 +2,7 @@ package com.zerobase.zerobasetableing.controller;
 
 
 import com.zerobase.zerobasetableing.domain.constants.ErrorCode;
+import com.zerobase.zerobasetableing.domain.form.AcceptRequestForm;
 import com.zerobase.zerobasetableing.domain.form.SignInForm;
 import com.zerobase.zerobasetableing.domain.form.SignUpForm;
 import com.zerobase.zerobasetableing.domain.model.Reservation;
@@ -42,7 +43,7 @@ public class SellerController {
     @GetMapping("/reservation/list")
     ResponseEntity<List<Reservation>> getReservationList(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
-            @RequestParam(name = "id") String storeId) {
+            @RequestParam(name = "storeId") String storeId) {
 
         if (!jwtTokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
@@ -58,7 +59,7 @@ public class SellerController {
     @GetMapping("/reservation/request")
     ResponseEntity<List<Reservation>> getReservationRequestList(
             @RequestHeader(name = "X-AUTH-TOKEN") String token,
-            @RequestParam(name = "id") String storeId) {
+            @RequestParam(name = "storeId") String storeId) {
 
         if (!jwtTokenProvider.validateToken(token)) {
             throw new CustomException(ErrorCode.INVALID_ACCESS);
@@ -72,6 +73,21 @@ public class SellerController {
 
 
     //예약 요청 수락
+    @PostMapping("/reservation/request/accept")
+    ResponseEntity<String> acceptReservationRequest(
+            @RequestHeader(name = "X-AUTH-TOKEN") String token,
+            @RequestBody AcceptRequestForm form) {
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS);
+        }
+
+        reservationService.acceptReservationRequest(
+                jwtTokenProvider.getId(token), form.getStoreId(), form.getReservationId());
+
+        return ResponseEntity.ok("해당 예약이 정상적으로 완료되었습니다.");
+    }
+
 
 
 }
