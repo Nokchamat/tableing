@@ -24,12 +24,14 @@ public class Reservation extends BaseEntity{
 
     private LocalDateTime currentReservationTime;
 
-    private LocalDateTime requestModifyReservationTime;
-
     private boolean isReservation;
 
     private Long customerId;
 
     private Long storeId;
+
+    private String storeKioskNumber;
+
+    private boolean isVisited;
 
 }

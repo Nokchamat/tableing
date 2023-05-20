@@ -1,5 +1,6 @@
 package com.zerobase.zerobasetableing.controller;
 
+import com.zerobase.zerobasetableing.domain.form.VisitedForm;
 import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.ReservationForm;
 import com.zerobase.zerobasetableing.domain.form.SignInForm;
@@ -40,7 +41,6 @@ public class CustomerController {
         return ResponseEntity.ok(token);
     }
 
-
     //예약
     @PostMapping("/reservation")
     ResponseEntity<String> requestReservation(
@@ -71,14 +71,13 @@ public class CustomerController {
         return ResponseEntity.ok(reservationList);
     }
 
-    //예약 내역 수정 - 토큰 인증 넣기
+    //가게 들어와서 키오스크로 도착 알림
+    @PostMapping("/reservation/arrival")
+    ResponseEntity<String> storeArrival(
+            @RequestBody VisitedForm form) {
+        reservationService.customerVisited(form);
 
-
-    //수정 시에 사장이 봐서 수락을 눌러야 함
-
-
-    //예약 내역 삭제 - 토큰 인증 넣기
-
-
+        return ResponseEntity.ok("도착 확인이 완료되었습니다.");
+    }
 
 }

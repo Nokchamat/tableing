@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Getter
 @Setter
@@ -30,5 +29,8 @@ public class Store extends BaseEntity{
     @JoinColumn(name = "seller_id")
     @JsonIgnore
     private Seller seller;
+
+    //number : storeId + name
+    private String kioskNumber;
 
 }

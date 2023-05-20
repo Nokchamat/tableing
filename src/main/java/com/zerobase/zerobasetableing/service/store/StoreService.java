@@ -55,7 +55,8 @@ public class StoreService {
                 .seller(seller)
                 .build();
 
-        storeRepository.save(store);
+        Store savedStore = storeRepository.save(store);
+        savedStore.setKioskNumber(savedStore.getId() + savedStore.getName());
 
         seller.getStore().add(store);
 
