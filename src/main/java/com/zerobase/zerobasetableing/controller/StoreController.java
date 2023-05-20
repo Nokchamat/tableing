@@ -49,4 +49,6 @@ public class StoreController {
                 storeService.registerStore(form, jwtTokenProvider.getId(token)));
     }
 
+
+
 }

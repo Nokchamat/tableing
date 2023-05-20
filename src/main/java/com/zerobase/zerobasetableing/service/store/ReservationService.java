@@ -1,5 +1,6 @@
 package com.zerobase.zerobasetableing.service.store;
 
+import com.zerobase.zerobasetableing.domain.form.VisitedForm;
 import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.ReservationForm;
 import com.zerobase.zerobasetableing.domain.model.Customer;
@@ -15,6 +16,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -31,6 +34,12 @@ public class ReservationService {
 
     @Transactional
     public void requestReservation(ReservationForm form) {
+
+        // 에약 요청한 시간이 현재로부터 15분 뒤 이상이 아니면 예약 요청이 안 됨
+        if (!form.getRequestReservationTime().isAfter(LocalDateTime.now().plusMinutes(15))) {
+            throw new CustomException(ErrorCode.PLEASE_RESERVATION_AFTER_15MINUTE);
+        }
+
         Store store = storeRepository.findById(form.getStoreId())
                         .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
 
@@ -44,15 +53,15 @@ public class ReservationService {
                 .storeName(store.getName())
                 .currentReservationTime(form.getRequestReservationTime())
                 .isReservation(false)
+                .isVisited(false)
+                .storeKioskNumber(store.getId() + store.getName())
                 .build();
-
 
         reservationRepository.save(reservation);
     }
 
     public List<Reservation> getCustomerReservationList(Long customerId) {
         return reservationRepository.findAllByCustomerId(customerId);
-
     }
 
     @Transactional
@@ -103,6 +112,32 @@ public class ReservationService {
         }
 
         reservation.setReservation(true);
-
     }
+
+    @Transactional
+    public void customerVisited(VisitedForm form) {
+
+        Reservation reservation =
+                reservationRepository.findById(form.getReservationId())
+                        .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_RESERVATION));
+
+        // 예약 상태가 isReservation = true 인지 확인
+        if (!reservation.isReservation()) {
+            throw new CustomException(ErrorCode.NOT_FOUND_RESERVATION);
+        }
+
+//         10분 전인지 확인
+        if (!LocalDateTime.now().isBefore(reservation.getCurrentReservationTime().minusMinutes(10)) ) {
+            throw new CustomException(ErrorCode.LATE_TIME_VISITED);
+        }
+
+        // 도착 상태가 false 인지 확인하여 중복 알람 방지
+        if (reservation.isVisited()) {
+            throw new CustomException(ErrorCode.ALREADY_VISITED);
+        }
+
+        reservation.setVisited(true);
+    }
+
+
 }

@@ -46,4 +46,5 @@ public class CustomerService {
 
         return jwtTokenProvider.createToken(customer.getId(), customer.getUserId());
     }
+
 }
