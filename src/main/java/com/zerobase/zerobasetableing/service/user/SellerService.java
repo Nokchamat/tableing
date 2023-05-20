@@ -23,11 +23,13 @@ public class SellerService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    // 셀러 회원가입
     @Transactional
     public void signUp(SignUpForm form) {
 
         sellerRepository.save(Seller.builder()
                         .userId(form.getUserId())
+                        //비밀번호 보안처리하여 저장
                         .password(passwordEncoder.encode(form.getPassword()))
                         .name(form.getName())
                         .age(form.getAge())
@@ -35,6 +37,7 @@ public class SellerService {
                 .build());
     }
 
+    //셀러 로그인
     public String signIn(SignInForm form) {
         Seller seller = sellerRepository
                 .findByUserId(form.getUserId())

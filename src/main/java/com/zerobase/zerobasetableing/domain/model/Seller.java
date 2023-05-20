@@ -29,6 +29,7 @@ public class Seller extends BaseEntity{
 
     private String phoneNumber;
 
+    // 판매자는 매장이 여러 개를 가지고 있을 수 있음
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "store_id")
     private List<Store> store;

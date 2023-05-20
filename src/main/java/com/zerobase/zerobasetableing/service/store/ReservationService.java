@@ -1,8 +1,7 @@
 package com.zerobase.zerobasetableing.service.store;
 
-import com.zerobase.zerobasetableing.domain.form.VisitedForm;
-import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.domain.form.ReservationForm;
+import com.zerobase.zerobasetableing.domain.form.VisitedForm;
 import com.zerobase.zerobasetableing.domain.model.Customer;
 import com.zerobase.zerobasetableing.domain.model.Reservation;
 import com.zerobase.zerobasetableing.domain.model.Seller;
@@ -12,12 +11,12 @@ import com.zerobase.zerobasetableing.domain.repository.ReservationRepository;
 import com.zerobase.zerobasetableing.domain.repository.SellerRepository;
 import com.zerobase.zerobasetableing.domain.repository.StoreRepository;
 import com.zerobase.zerobasetableing.exception.CustomException;
+import com.zerobase.zerobasetableing.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -32,6 +31,7 @@ public class ReservationService {
 
     private final SellerRepository sellerRepository;
 
+    // 예약 요청하는 함수
     @Transactional
     public void requestReservation(ReservationForm form) {
 
@@ -60,10 +60,12 @@ public class ReservationService {
         reservationRepository.save(reservation);
     }
 
+    // 고객 예약 리스트 가져오기
     public List<Reservation> getCustomerReservationList(Long customerId) {
         return reservationRepository.findAllByCustomerId(customerId);
     }
 
+    // 셀러 예약 리스트 가져오기 (커스터머가 예약을 요청한 후 셀러가 예약을 받은 리스트)
     @Transactional
     public List<Reservation> getSellerReservationList(Long sellerId, Long storeId) {
 
@@ -77,6 +79,7 @@ public class ReservationService {
         return reservationRepository.findAllByStoreIdAndIsReservationIsTrue(storeId);
     }
 
+    // 커스터머로부터 요청된 예약 리스트 가져오기 (커스터머가 예약을 요청했지만 셀러가 아직 예약을 받지 않은 리스트)
     @Transactional
     public List<Reservation> getSellerReservationRequestList(Long sellerId, Long storeId) {
 
@@ -90,6 +93,7 @@ public class ReservationService {
         return reservationRepository.findAllByStoreIdAndIsReservationIsFalse(storeId);
     }
 
+    // 커스터머로부터 요청된 예약을 수락함
     @Transactional
     public void acceptReservationRequest(Long sellerId, Long storeId, Long reservationId) {
 
@@ -114,6 +118,7 @@ public class ReservationService {
         reservation.setReservation(true);
     }
 
+    // 에약이 완료된 이후 상점에 방문했을 때 방문했다고 체크함
     @Transactional
     public void customerVisited(VisitedForm form) {
 

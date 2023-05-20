@@ -37,15 +37,6 @@ public class StoreService {
 
     //가게 상세 정보 보기
     public Store getStoreDetail(Long id) {
-
-        Store store = storeRepository.findById(id)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
-
-        System.out.println("=======================");
-        System.out.println(store.getReviewList());
-        System.out.println("=======================");
-
-
         return storeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
     }

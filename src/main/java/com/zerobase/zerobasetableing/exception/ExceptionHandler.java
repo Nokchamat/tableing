@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class ExceptionHandler {
 
+    // 예외 발생 시 response 로 CustomException 의 내용을 담기 위해 설정
     @org.springframework.web.bind.annotation.ExceptionHandler({CustomException.class})
     public ResponseEntity<CustomException.CustomExceptionResponse> exceptionHandler(
             HttpServletRequest request,
