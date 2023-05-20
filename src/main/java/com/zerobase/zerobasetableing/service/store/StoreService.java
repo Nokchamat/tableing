@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,10 +37,18 @@ public class StoreService {
 
     //가게 상세 정보 보기
     public Store getStoreDetail(Long id) {
+
+        Store store = storeRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
+
+        System.out.println("=======================");
+        System.out.println(store.getReviewList());
+        System.out.println("=======================");
+
+
         return storeRepository.findById(id)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_STORE));
     }
-
 
     //가게 등록하기
     @Transactional
@@ -53,6 +62,7 @@ public class StoreService {
                 .location(form.getLocation())
                 .description(form.getDescription())
                 .seller(seller)
+                .reviewList(new ArrayList<>())
                 .build();
 
         Store savedStore = storeRepository.save(store);

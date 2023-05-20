@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,5 +33,9 @@ public class Store extends BaseEntity{
 
     //number : storeId + name
     private String kioskNumber;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "review_id")
+    private List<Review> reviewList;
 
 }

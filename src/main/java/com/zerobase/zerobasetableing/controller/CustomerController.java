@@ -1,10 +1,7 @@
 package com.zerobase.zerobasetableing.controller;
 
-import com.zerobase.zerobasetableing.domain.form.VisitedForm;
+import com.zerobase.zerobasetableing.domain.form.*;
 import com.zerobase.zerobasetableing.exception.ErrorCode;
-import com.zerobase.zerobasetableing.domain.form.ReservationForm;
-import com.zerobase.zerobasetableing.domain.form.SignInForm;
-import com.zerobase.zerobasetableing.domain.form.SignUpForm;
 import com.zerobase.zerobasetableing.domain.model.Reservation;
 import com.zerobase.zerobasetableing.exception.CustomException;
 import com.zerobase.zerobasetableing.security.JwtTokenProvider;
@@ -78,6 +75,14 @@ public class CustomerController {
         reservationService.customerVisited(form);
 
         return ResponseEntity.ok("도착 확인이 완료되었습니다.");
+    }
+
+    @PostMapping("/review")
+    ResponseEntity<String> writeReview(@RequestBody ReviewForm form) {
+
+        customerService.writeReview(form);
+
+        return ResponseEntity.ok("리뷰 작성이 완료됐습니다.");
     }
 
 }
