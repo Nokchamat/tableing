@@ -77,8 +77,14 @@ public class CustomerController {
         return ResponseEntity.ok("도착 확인이 완료되었습니다.");
     }
 
+    //리뷰 쓰기
     @PostMapping("/review")
-    ResponseEntity<String> writeReview(@RequestBody ReviewForm form) {
+    ResponseEntity<String> writeReview(@RequestBody ReviewForm form,
+                                       @RequestHeader(name = "X-AUTH-TOKEN") String token) {
+
+        if (!jwtTokenProvider.validateToken(token)) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS);
+        }
 
         customerService.writeReview(form);
 

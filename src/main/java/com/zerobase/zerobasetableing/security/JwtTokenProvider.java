@@ -1,7 +1,7 @@
 package com.zerobase.zerobasetableing.security;
 
-import com.zerobase.zerobasetableing.exception.ErrorCode;
 import com.zerobase.zerobasetableing.exception.CustomException;
+import com.zerobase.zerobasetableing.exception.ErrorCode;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 import java.util.Date;
@@ -29,12 +28,10 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() {
-        log.info("[init] JwtTokenProvider 내 secretKey 초기화 시작");
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
-
-        log.info("[init] JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
+    //토큰 생성
     public String createToken(Long id, String userId) {
         Claims claims = Jwts.claims().setSubject(userId); // 내용
         claims.put("id", id);
@@ -50,6 +47,7 @@ public class JwtTokenProvider {
         return token;
     }
 
+    //토큰 생성 시 넣었던 id 값 추출
     public Long getId(String token) {
         return Long.valueOf(
                 String.valueOf(
@@ -57,11 +55,7 @@ public class JwtTokenProvider {
                                 .parseClaimsJws(token).getBody().get("id")));
     }
 
-    public String resolveToken(HttpServletRequest request) {
-        log.info("[resolveToken HTTP 헤더에서 Token 값 추출");
-        return request.getHeader("X-AUTH-TOKEN");
-    }
-
+    //토큰이 유효한지 체크
     public boolean validateToken(String token) {
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);

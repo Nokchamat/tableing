@@ -36,10 +36,12 @@ public class CustomerService {
 
     private final JwtTokenProvider jwtTokenProvider;
 
+    //커스터머 회원가입
     @Transactional
     public void signUp(SignUpForm form) {
         customerRepository.save(Customer.builder()
                 .userId(form.getUserId())
+                // 패스워드는 보안처리하여 저장
                 .password(passwordEncoder.encode(form.getPassword()))
                 .name(form.getName())
                 .age(form.getAge())
@@ -47,6 +49,8 @@ public class CustomerService {
                 .build());
     }
 
+    //커스터머 로그인
+    @Transactional
     public String signIn(SignInForm form) {
         Customer customer = customerRepository
                 .findByUserId(form.getUserId())
@@ -60,8 +64,10 @@ public class CustomerService {
         return jwtTokenProvider.createToken(customer.getId(), customer.getUserId());
     }
 
+    //커스터머 리뷰 작성
     public void writeReview(ReviewForm form) {
 
+        // 리뷰가 이미 있으면 예외 발생
         if (reviewRepository.findByReservationId(form.getReservationId()).isPresent()) {
             throw new CustomException(ErrorCode.ALREADY_REVIEWED);
         }
@@ -70,6 +76,7 @@ public class CustomerService {
                 reservationRepository.findById(form.getReservationId())
                         .orElseThrow(()-> new CustomException(ErrorCode.NOT_FOUND_RESERVATION));
 
+        // 해당 불리언이 false 라면 가게를 이용하지 않은 사용자 -> 예외 발생
         if (!reservation.isReservation() || !reservation.isVisited()) {
             throw new CustomException(ErrorCode.NOT_VISITED);
         }
